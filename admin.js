@@ -1,7 +1,12 @@
 
 const supabaseUrl = 'https://mhjyifwfxvqvxzqlmpix.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oanlpZndmeHZxdnh6cWxtcGl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MDgzOTgsImV4cCI6MjEwMTQ4NDM5OH0.vz-WRw1kcggRXHntuwn0cQ9sZWexTVlSHYlML-hiiOA';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+let supabase;
+try {
+  supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+} catch (e) {
+  alert('에러 발생 (Supabase 로드 실패): ' + e.message + '\n새로고침을 해보세요.');
+}
 
 let equipment = [];
 let requests = [];

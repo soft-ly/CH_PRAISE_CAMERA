@@ -1,7 +1,12 @@
 
 const supabaseUrl = 'https://mhjyifwfxvqvxzqlmpix.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oanlpZndmeHZxdnh6cWxtcGl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MDgzOTgsImV4cCI6MjEwMTQ4NDM5OH0.vz-WRw1kcggRXHntuwn0cQ9sZWexTVlSHYlML-hiiOA';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+let supabase;
+try {
+  supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+} catch (e) {
+  alert('에러 발생 (Supabase 로드 실패): ' + e.message + '\n새로고침을 해보세요.');
+}
 const STORAGE={equipment:'saegyeol_equipment_v4',requests:'saegyeol_requests_v4',me:'saegyeol_user_v4',adminPin:'saegyeol_admin_pin_v1'};
 const rawSeed=[
 ['A7M4','카메라','보관중','2026.02.02','₩1,800,000','7730304','베터리1, 충전기1','인록','박은총','중고구매',1],
