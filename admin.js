@@ -1,4 +1,4 @@
-
+const generateUUID = () => (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
 const supabaseUrl = 'https://mhjyifwfxvqvxzqlmpix.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oanlpZndmeHZxdnh6cWxtcGl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MDgzOTgsImV4cCI6MjEwMTQ4NDM5OH0.vz-WRw1kcggRXHntuwn0cQ9sZWexTVlSHYlML-hiiOA';
 let supabase;
@@ -45,7 +45,7 @@ const rawSeed=[
 ['FX3_C','카메라','보관중','2026.07.29','₩3,300,000','5075184','배터리1, 충전기','인록','박은총','중고구매',1]
 ];
 const prefixes={카메라:'CAM',렌즈:'LENS',조명:'LIGHT',기타:'ETC'};const counters={};
-const seedEquipment=rawSeed.map(r=>{const cat=r[1];counters[cat]=(counters[cat]||0)+1;return{id:crypto.randomUUID(),name:r[0],category:cat,status:r[2],purchaseDate:r[3],price:r[4],serial:r[5],components:r[6],manager:r[7],owner:r[8],desc:r[9],qty:r[10],code:`${prefixes[cat]||'EQ'}-${String(counters[cat]).padStart(2,'0')}`}});
+const seedEquipment=rawSeed.map(r=>{const cat=r[1];counters[cat]=(counters[cat]||0)+1;return{id:generateUUID(),name:r[0],category:cat,status:r[2],purchaseDate:r[3],price:r[4],serial:r[5],components:r[6],manager:r[7],owner:r[8],desc:r[9],qty:r[10],code:`${prefixes[cat]||'EQ'}-${String(counters[cat]).padStart(2,'0')}`}});
 const $=s=>document.querySelector(s);const fmt=v=>new Intl.DateTimeFormat('ko-KR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v));const label={pending:'승인 대기',approved:'승인 완료',rented:'대여 중',overdue:'반납 지연',returned:'반납 완료',rejected:'반려'};function statusOf(r){return r.status==='rented'&&new Date(r.end)<new Date()?'overdue':r.status}function idsOf(r){return r.equipmentIds||[r.equipmentId].filter(Boolean)}function eqsOf(r){return idsOf(r).map(id=>equipment.find(e=>e.id===id)).filter(Boolean)}function overlap(a,b,c,d){return new Date(a)<new Date(d)&&new Date(b)>new Date(c)}function blocking(r){return ['pending','approved','rented','overdue'].includes(statusOf(r))}function unavailable(id,start,end,exclude=null){return requests.some(r=>r.id!==exclude&&idsOf(r).includes(id)&&blocking(r)&&overlap(start,end,r.start,r.end))}function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}function dayReqs(date){const s=new Date(date.getFullYear(),date.getMonth(),date.getDate()),e=new Date(s);e.setDate(e.getDate()+1);return requests.filter(r=>statusOf(r)!=='rejected'&&new Date(r.start)<e&&new Date(r.end)>s)}function toast(m){const t=$('#toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 let calendarMonth=new Date(),selectedCalendarDate=new Date();calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth(),1);
 

@@ -35,7 +35,8 @@ const rawSeed=[
 ['FX3_C','카메라','보관중','2026.07.29','₩3,300,000','5075184','배터리1, 충전기','인록','박은총','중고구매',1]
 ];
 const prefixes={카메라:'CAM',렌즈:'LENS',조명:'LIGHT',기타:'ETC'};const counters={};
-const seedEquipment=rawSeed.map(r=>{const cat=r[1];counters[cat]=(counters[cat]||0)+1;return{id:crypto.randomUUID(),name:r[0],category:cat,status:r[2],purchaseDate:r[3],price:r[4],serial:r[5],components:r[6],manager:r[7],owner:r[8],desc:r[9],qty:r[10],code:`${prefixes[cat]||'EQ'}-${String(counters[cat]).padStart(2,'0')}`}});
+const generateUUID = () => (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
+const seedEquipment=rawSeed.map(r=>{const cat=r[1];counters[cat]=(counters[cat]||0)+1;return{id:generateUUID(),name:r[0],category:cat,status:r[2],purchaseDate:r[3],price:r[4],serial:r[5],components:r[6],manager:r[7],owner:r[8],desc:r[9],qty:r[10],code:`${prefixes[cat]||'EQ'}-${String(counters[cat]).padStart(2,'0')}`}});
 let equipment = [];
 let requests = [];
 async function loadData() {
