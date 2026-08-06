@@ -65,7 +65,7 @@ function renderAll(){renderAdmin();renderCal()}
 $('.tabs').addEventListener('click',e=>{if(!e.target.classList.contains('tab'))return;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));e.target.classList.add('active');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$('#'+e.target.dataset.view).classList.add('active')});$('#requestFilter').onchange=renderAdmin;$('#openAddModal').onclick=()=>{$('#equipmentForm').reset();$('#equipmentId').value='';$('#equipmentQty').value=1;$('#equipmentStatus').value='보관중';$('#equipmentModalTitle').textContent='장비 추가';$('#equipmentModal').classList.remove('hidden')};
 $('#openMinistryModal').onclick=()=>{
   $('#ministryForm').reset();
-  $('#ministryEquipmentList').innerHTML=equipment.map(e=>`<label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" name="ministryEq" value="${e.id}"> ${e.name} ${e.serial?`<span class="muted" style="font-size:12px;">(S/N ${e.serial})</span>`:''}</label>`).join('');
+  $('#ministryEquipmentList').innerHTML=equipment.map(e=>`<label style="display:flex; flex-direction:row; justify-content:flex-start; align-items:center; gap:8px; cursor:pointer; font-weight:normal; margin:0;"><input type="checkbox" name="ministryEq" value="${e.id}" style="width:auto; margin:0;"> <span>${e.name} ${e.serial?`<span class="muted" style="font-size:12px;">(S/N ${e.serial})</span>`:''}</span></label>`).join('');
   $('#ministryModal').classList.remove('hidden');
 };
 $('#ministryForm').onsubmit=async e=>{
