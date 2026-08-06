@@ -17,6 +17,7 @@
 .calendar-tooltip small{display:block;color:#bbb;margin-bottom:8px}
 .calendar-tooltip-list{display:grid;gap:3px}
 .calendar-tooltip-list>span{display:block}
+.calendar-event:hover,.calendar-event:focus-visible,.calendar-event.open{z-index:100!important}
 .calendar-event:hover .calendar-tooltip,.calendar-event:focus-visible .calendar-tooltip,.calendar-event.open .calendar-tooltip{display:block}
 .calendar-day:nth-child(7n) .calendar-tooltip,.calendar-day:nth-child(7n-1) .calendar-tooltip{left:auto;right:8px}
 @media(max-width:800px){.calendar-tooltip{position:fixed;left:50%!important;right:auto!important;top:50%;transform:translate(-50%,-50%);width:min(82vw,340px);max-height:60vh;overflow:auto}.calendar-event:hover .calendar-tooltip{display:none}.calendar-event.open .calendar-tooltip{display:block}}
