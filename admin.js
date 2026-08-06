@@ -73,7 +73,17 @@ $('#ministryForm').onsubmit=async e=>{
   const start=$('#ministryStart').value, end=$('#ministryEnd').value;
   const ids=Array.from(document.querySelectorAll('input[name="ministryEq"]:checked')).map(x=>x.value);
   if(!ids.length) return toast('장비를 하나 이상 선택해주세요.');
-  if(ids.some(id=>unavailable(id,start,end))) return toast('선택한 일정에 이미 예약된 장비가 포함되어 있습니다.');
+  
+  const overlapping=requests.filter(r=>blocking(r)&&idsOf(r).some(id=>ids.includes(id))&&overlap(start,end,r.start,r.end));
+  if(overlapping.length>0){
+    const names=overlapping.map(r=>r.applicant).join(', ');
+    if(!confirm(`이미 접수된 신청(${names})과 일정이 겹칩니다.\n해당 신청들을 반려(취소)하고 사역 일정을 우선 등록하시겠습니까?`)) return;
+    for(const r of overlapping){
+      await supabase.from('requests').update({status:'rejected'}).eq('id',r.id);
+      r.status='rejected';
+    }
+  }
+
   const applicant='[공식사역] '+$('#ministryName').value.trim()+' ('+$('#ministryManager').value.trim()+')';
   const newReq={equipmentIds:ids,applicant,purpose:'사역 일정 선점',start_date:start,end_date:end,memo:$('#ministryMemo').value.trim(),status:'approved'};
   const {data,error}=await supabase.from('requests').insert([newReq]).select();
@@ -81,7 +91,7 @@ $('#ministryForm').onsubmit=async e=>{
   requests.push({...data[0],start:data[0].start_date,end:data[0].end_date});
   renderAll();
   $('#ministryModal').classList.add('hidden');
-  toast('사역 일정이 등록되었습니다.');
+  toast('사역 일정이 우선 등록되었습니다.');
 };
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$('#'+b.dataset.close).classList.add('hidden'));$('#equipmentForm').onsubmit=async e=>{e.preventDefault();const id=$('#equipmentId').value,data={name:$('#equipmentName').value.trim(),code:$('#equipmentCode').value.trim(),serial:$('#equipmentSerial').value.trim(),category:$('#equipmentCategory').value.trim(),qty:Number($('#equipmentQty').value),status:$('#equipmentStatus').value.trim(),purchaseDate:$('#equipmentPurchaseDate').value.trim(),price:$('#equipmentPrice').value.trim(),manager:$('#equipmentManager').value.trim(),owner:$('#equipmentOwner').value.trim(),components:$('#equipmentComponents').value.trim(),desc:$('#equipmentDesc').value.trim()};
 if(id){
